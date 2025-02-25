@@ -1,4 +1,4 @@
-# Option-Pricer
+# 📈 Option-Pricer
 
 ## Goal 
 
@@ -23,9 +23,9 @@ I will try as a personal project an Option Pricer ( American &amp; European )
 ## Resource
 ### Web & personal note
 - exemple with out API : [Site de F.Longin](https://www.longin.fr/Ressources_Outils/Pricers/Actions/Call_put_standards_dividendes_continus/options_standards_actions_calls_puts_pricer.php)
-- Monte Carlo
-- Les grecs
-- Modele Option americaine
+- [Monte Carlo](MonteCarlo.md)
+- [Black-Sholes & les grecs](BSG.md)
+- [Modele Option americaine](America.md)
 
 ### Book
   

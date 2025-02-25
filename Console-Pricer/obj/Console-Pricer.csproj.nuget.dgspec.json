@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/var/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj": {}
+    "/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj": {}
   },
   "projects": {
-    "/var/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj": {
+    "/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/var/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj",
+        "projectUniqueName": "/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj",
         "projectName": "Console-Pricer",
-        "projectPath": "/var/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj",
+        "projectPath": "/home/adam/Documents/Option-Pricer/Console-Pricer/Console-Pricer.csproj",
         "packagesPath": "/home/adam/.nuget/packages/",
-        "outputPath": "/var/home/adam/Documents/Option-Pricer/Console-Pricer/obj/",
+        "outputPath": "/home/adam/Documents/Option-Pricer/Console-Pricer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/adam/.nuget/NuGet/NuGet.Config"
