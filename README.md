@@ -15,9 +15,9 @@ I will try as a personal project an Option Pricer ( American &amp; European )
 
 ## Stake
 
-- C#
+- C# 13.0
 - WPF
-- .net 
+- .net 9.0
 
 
 ## Resource
