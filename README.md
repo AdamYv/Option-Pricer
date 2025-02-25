@@ -21,12 +21,15 @@ I will try as a personal project an Option Pricer ( American &amp; European )
 
 
 ## Resource
-
+### Web & personal note
 - exemple with out API : [Site de F.Longin](https://www.longin.fr/Ressources_Outils/Pricers/Actions/Call_put_standards_dividendes_continus/options_standards_actions_calls_puts_pricer.php)
 - Monte Carlo
-- Rappel Black-Scholes
 - Les grecs
 - Modele Option americaine
+
+### Book
+  
+- [OPTIONS, FUTURES,AND OTHER DERIVATIVES John C. Hull](http://lib.ysu.am/disciplines_bk/2b66030e0dd4c77b2bda437f6c1e5e66.pdf)
 
 
 
