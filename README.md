@@ -18,6 +18,7 @@ I will try as a personal project an Option Pricer ( American &amp; European )
 - C# 13.0
 - WPF
 - .net 9.0
+- API : [Alpha Vantage](https://www.alphavantage.co)
 
 
 ## Resource
