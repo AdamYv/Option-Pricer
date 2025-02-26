@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console-Pricer", "Console-Pricer.csproj", "{BE2E4D1A-2D8B-8C18-A9AB-268CE0307064}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOptionPricer", "MyOptionPricer\MyOptionPricer.csproj", "{7F5346E9-6CF8-A912-2DAE-572855FD19FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,15 +10,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE2E4D1A-2D8B-8C18-A9AB-268CE0307064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE2E4D1A-2D8B-8C18-A9AB-268CE0307064}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE2E4D1A-2D8B-8C18-A9AB-268CE0307064}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE2E4D1A-2D8B-8C18-A9AB-268CE0307064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F5346E9-6CF8-A912-2DAE-572855FD19FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F5346E9-6CF8-A912-2DAE-572855FD19FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F5346E9-6CF8-A912-2DAE-572855FD19FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F5346E9-6CF8-A912-2DAE-572855FD19FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2CCBD468-9A1C-4FCE-A5FE-F0086C879F08}
+		SolutionGuid = {1B598369-DD35-48CD-A0E9-862BA9C6B102}
 	EndGlobalSection
 EndGlobal

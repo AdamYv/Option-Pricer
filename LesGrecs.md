@@ -1,4 +1,4 @@
-# Modele Black-Sholes & les grecs 🇪🇺 
+# Les grecs 🇪🇺 
 
 Le modèle de Black-Scholes est une formule mathématique utilisée pour évaluer le prix des options européennes. Les "Grecs" sont des mesures de sensibilité du prix de l'option par rapport à différents facteurs. Voici comment calculer les principaux Grecs dans le cadre du modèle de Black-Scholes :
 

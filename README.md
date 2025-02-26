@@ -25,8 +25,9 @@ I will try as a personal project an Option Pricer ( American &amp; European )
 ### Web & personal note
 - exemple with out API : [Site de F.Longin](https://www.longin.fr/Ressources_Outils/Pricers/Actions/Call_put_standards_dividendes_continus/options_standards_actions_calls_puts_pricer.php)
 - [Monte Carlo](MonteCarlo.md)
-- [Black-Sholes & les grecs](BSG.md)
+- [Les grecs](LesGrecs.md)
 - [Modele Option americaine](America.md)
+- [Modele Black-Shole](Black-Shole.md)
 
 ### Book
   
