@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "rcOpLnrayZY=",
+  "success": true,
+  "projectFilePath": "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
+  "expectedPackageFiles": [
+    "/home/adam/.nuget/packages/mathnet.numerics/5.0.0/mathnet.numerics.5.0.0.nupkg.sha512",
+    "/home/adam/.nuget/packages/spectre.console/0.49.1/spectre.console.0.49.1.nupkg.sha512"
+  ],
+  "logs": []
+}
