@@ -4,8 +4,7 @@ namespace MyOptionPricer{
 
 public class BlackSholes {
 
-    //[ ]: Add the necessary attributes 
-    //FIXME On appel deux fois la fonction D_ONE() dans la fonction call_BS() et D_TWO() stocker la valeur apres calcul dans une variable
+    //[x]: Add the necessary attributes simplify the code reading
     public double S { get; private set; }  
         public double K { get; private set; }  
         public double r { get; private set; }  
