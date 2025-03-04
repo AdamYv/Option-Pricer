@@ -13,24 +13,26 @@ namespace MyOptionPricer
         double r ; // risk-free rate
         // [ ] We will use function that check the convergence of the binomial model to stop the step
         int n ; // number of steps
-        int dT ; // time step
+        double dT ; // time during each step
+
+        double q ; // Dividend yield
         
         
-        //constructor
-        public Binomial(double S, double K, double T, double sigma, double r, int n) {
+        //STEP 0
+        public Binomial(double S, double K, double T, double sigma, double r, int n, double q ){
             this.S = S;
             this.K = K;
             this.T = T;
             this.sigma = sigma;
             this.r = r;
             this.n = n; 
-            this.dT = (int) Math.Round(T / n);
+            this.dT = T/n;
+            this.q = q;
         }
 
 
         private double Compute_Up() {
-
-            return Math.Exp(sigma * Math.Sqrt(T / dT));
+            return Math.Exp(sigma * Math.Sqrt(dT));
 
         }
 
@@ -39,9 +41,13 @@ namespace MyOptionPricer
         }
 
         private double Compute_Risk_Neutral_Probability() {
-            return (Math.Exp(r * T / dT) - Compute_Down()) / (Compute_Up() - Compute_Down());
+        
+            double a = Math.Exp(r - q) * dT- Compute_Down();
+            double p = a / (Compute_Up() - Compute_Down());
+            return p;
         }
 
+        //STEP 1 : Create the tree
         private double[,] Create_Tree(){
             double u = Compute_Up();
             double d = Compute_Down();
@@ -65,24 +71,28 @@ namespace MyOptionPricer
             double p = Compute_Risk_Neutral_Probability();
 
 
+
             double[,] tree = Create_Tree();
             double[,] option = new double[n+1, n+1];
 
 
 
-
+            //ETAPE 2:Compute the option price at the end of each node
             for (int j = 0; j <= n; j++){
-                //Compute the payoff at maturity like activation function
                 option[n, j] = Math.Max(0, (isCall ? 1 : -1) * (tree[n, j] - K));
             }
-
-
+            
+            //ETAPE 3:Compute the option price at the last node 
             for (int i = n-1; i >= 0; i--){
+                
                 for (int j = 0; j <= i; j++){
                     double exerciseValue = isCall ? Math.Max(0, tree[i, j] - K) : Math.Max(0, K - tree[i, j]);
                     double holdValue = df * (p * option[i + 1, j + 1] + (1 - p) * option[i + 1, j]);
+
                     option[i, j] = Math.Max(exerciseValue, holdValue);  // Choix optimal
-                    option[i, j] = Math.Exp(-r * T / n) * (p * option[i+1, j+1] + (1-p) * option[i+1, j]);
+
+                    option[i, j] = Math.Exp(-r * dT) * (p * option[i+1, j+1] + (1-p) * option[i+1, j]);
+                    
                 }
             }
 

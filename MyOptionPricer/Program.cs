@@ -16,23 +16,20 @@ namespace MyOptionPricer
             // [ ] On affiche le prix de l'option call ou put
             
 
-            
-
-
-            
-
-
-
             // Paramètres de l'option
-            double spotPrice = 100.0;       // Prix actuel de l'actif sous-jacent (S)
-            double strikePrice = 95.0;      // Prix d'exercice (K)
-            double riskFreeRate = 0.05;     // Taux sans risque (r)
-            double volatility = 0.2;        // Volatilité (sigma)
-            double timeToMaturity = 1.0;    // Temps jusqu'à l'expiration en années (T)
-            int accuracy = 100;
+            double spotPrice = 100.0;       //  (S)
+            double strikePrice = 95.0;      //  (K)
+            double riskFreeRate = 0.05;     //  (r)
+            double volatility = 0.2;        //  (sigma)
+            double timeToMaturity = 1.0;    //  (T)
+            int accuracy = 20;              //  (n)
+            double DividendYield = 0.0;     //  (q)
 
             // Création de l'objet BlackSholes
-            Binomial Bin = new Binomial(spotPrice, strikePrice, riskFreeRate, volatility, timeToMaturity, accuracy);
+            var Bin = new Binomial(spotPrice, strikePrice, riskFreeRate, volatility, timeToMaturity, accuracy,DividendYield );
+            Console.WriteLine($"Calcul du prix de l'option avec le modèle binomial à {accuracy} étapes");
+
+            Console.WriteLine($"K: {strikePrice}, S: {spotPrice}, r: {riskFreeRate}, sigma: {volatility}, T: {timeToMaturity}");
 
             // Calcul du prix de l'option call
             double callPrice = Bin.Compute_Option(true);
