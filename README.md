@@ -1,37 +1,36 @@
-# 📈 Option-Pricer
+* * *
 
-## Goal 
+# 📈 Option Pricer
 
-I will try as a personal project an Option Pricer ( American &amp; European ) 
+## Goal
 
+I am working on an Option Pricer as a personal project (American & European).
 
-## Feature in progress 
+## Features in Progress
 
-- Pricing Modele using classic (Black-Sholes) and advenced model (Monte carlo)
-- Compute the Grec ( $\Delta$ , $\Gamma$ , $\Theta$ , $\rho$ )
-- first UI : Displaying the result 
-- Simulate
-- Integrate API : for the asset price , strike ,  volatility ...
+- Pricing models using classical (Black-Scholes) and advanced methods (Monte Carlo).
+- Computing the Greeks ($\Delta$, $\Gamma$, $\Theta$, $\rho$).
+- Initial UI: Displaying results.
+- Simulation.
+- API integration for asset price, strike price, volatility, etc.
 
-## Stake
+## Stack
 
 - C# 13.0
 - WPF
-- .net 9.0
-- API : [Alpha Vantage](https://www.alphavantage.co)
+- .NET 9.0
+- API: [Alpha Vantage](https://www.alphavantage.co)
 
+## Resources
 
-## Resource
-### Web & personal note
-- exemple with out API : [Site de F.Longin](https://www.longin.fr/Ressources_Outils/Pricers/Actions/Call_put_standards_dividendes_continus/options_standards_actions_calls_puts_pricer.php)
-- [Monte Carlo](MonteCarlo.md)
-- [Les grecs](LesGrecs.md)
-- [Modele Option americaine](America.md)
-- [Modele Black-Shole](Black-Shole.md)
+### Web & Personal Notes
 
-### Book
-  
-- [OPTIONS, FUTURES,AND OTHER DERIVATIVES John C. Hull](http://lib.ysu.am/disciplines_bk/2b66030e0dd4c77b2bda437f6c1e5e66.pdf)
+- Example without API: [Site de F. Longin](https://www.longin.fr/Ressources_Outils/Pricers/Actions/Call_put_standards_dividendes_continus/options_standards_actions_calls_puts_pricer.php)
+- Monte Carlo
+- The Greeks
+- American Option Model
+- Black-Scholes Model
 
+### Books
 
-
+- [OPTIONS, FUTURES, AND OTHER DERIVATIVES - John C. Hull](http://lib.ysu.am/disciplines_bk/2b66030e0dd4c77b2bda437f6c1e5e66.pdf)
