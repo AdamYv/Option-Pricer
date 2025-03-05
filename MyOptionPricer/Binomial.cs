@@ -1,6 +1,4 @@
 using System;
-using System.Linq.Expressions;
-using MathNet.Numerics.Distributions;
 
 namespace MyOptionPricer
 {
@@ -23,63 +21,67 @@ namespace MyOptionPricer
             this.S = S;
             this.K = K;
             this.T = T;
-            this.sigma = sigma;
             this.r = r;
+            this.q = q;
+            this.sigma = sigma;
             this.n = n; 
             this.dT = T/n;
-            this.q = q;
         }
 
 
-        private double Compute_Up() {
+        private double computeUp() {
             return Math.Exp(sigma * Math.Sqrt(dT));
 
         }
 
-        private double Compute_Down() {
-            return 1 / Compute_Up();
+        private double computeDown() {
+            return 1 / computeUp();
         }
 
-        private double Compute_Risk_Neutral_Probability() {
+        private double computeRiskNeutralProbability() {
         
-            double a = Math.Exp(r - q) * dT- Compute_Down();
-            double p = a / (Compute_Up() - Compute_Down());
+            double a = Math.Exp((r - q) * dT)- computeDown();
+            double p = a / (computeUp() - computeDown());
             return p;
         }
 
-        //STEP 1 : Create the tree
-        private double[,] Create_Tree(){
-            double u = Compute_Up();
-            double d = Compute_Down();
+        //STEP 1 : Init the tree
+        private double[,] createTree()
+        {
+            
+            double u = computeUp();   // Facteur d'augmentation
+            double d = computeDown(); // Facteur de diminution
+            double[,] tree = new double[n + 1, n + 1]; // Arbre de taille (n+1) x (n+1)
+            // Initialisation du premier élément (prix initial)
+            for (int i = 0; i <= n; i++)
+            {
+                tree[i, 0] = S * Math.Pow(d, i); // Remplit la première colonne (descente pure)
+                Console.WriteLine($"tree[{i},{0}] = {tree[i,0]}");
 
-            double[,] tree = new double [n+1, n+1];
-
-            tree[0, 0] = S;
-
-            for (int i =1; i<= n ; i++){
-                for (int j = 1; j <= i; j++){
-                    tree[i, j] = S * Math.Pow(u, j) * Math.Pow(d, i-j);
+                for (int j = 1; j <= i; j++)
+                {
+                    tree[i, j] = tree[i, j - 1] * u / d; // Génère les valeurs successives
+                    Console.WriteLine($"tree[{i},{j}] = {tree[i,j]}");
                 }
             }
+            
             return tree;
-        }
+}
+
+
+
 
         public double Compute_Option(bool isCall){
             double df = Math.Exp(-r * T / n); // update factor
-            double u = Compute_Up();
-            double d = Compute_Down();
-            double p = Compute_Risk_Neutral_Probability();
-
-
-
-            double[,] tree = Create_Tree();
-            double[,] option = new double[n+1, n+1];
+            double p = computeRiskNeutralProbability();
+            double[,] tree = createTree();
+            double[,] optionTree = new double[n+1, n+1];
 
 
 
             //ETAPE 2:Compute the option price at the end of each node
             for (int j = 0; j <= n; j++){
-                option[n, j] = Math.Max(0, (isCall ? 1 : -1) * (tree[n, j] - K));
+                optionTree[n, j] = Math.Max(0, (isCall ? 1 : -1) * (tree[n, j] - K));
             }
             
             //ETAPE 3:Compute the option price at the last node 
@@ -87,16 +89,14 @@ namespace MyOptionPricer
                 
                 for (int j = 0; j <= i; j++){
                     double exerciseValue = isCall ? Math.Max(0, tree[i, j] - K) : Math.Max(0, K - tree[i, j]);
-                    double holdValue = df * (p * option[i + 1, j + 1] + (1 - p) * option[i + 1, j]);
+                    double holdValue = df * (p * optionTree[i + 1, j + 1] + (1 - p) * optionTree[i + 1, j]);
 
-                    option[i, j] = Math.Max(exerciseValue, holdValue);  // Choix optimal
-
-                    option[i, j] = Math.Exp(-r * dT) * (p * option[i+1, j+1] + (1-p) * option[i+1, j]);
+                    optionTree[i, j] = Math.Max(exerciseValue, holdValue);  // Choix optimal
                     
                 }
             }
 
-            return option[0, 0];
+            return optionTree[0, 0];
         }
 
 

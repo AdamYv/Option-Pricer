@@ -10,23 +10,23 @@ namespace MyOptionPricer
             string myBanner = File.ReadAllText("ascii_art.txt");
          
             Console.WriteLine(myBanner);
-            Console.WriteLine(new string('-', 100));
+            Console.WriteLine(new string('=', 80));
 
             // [ ] Objectif avoir une interfasse ou l'on entre le symbol la date d'expiration et le prix d'exercice
             // [ ] On affiche le prix de l'option call ou put
             
 
             // Paramètres de l'option
-            double spotPrice = 100.0;       //  (S)
-            double strikePrice = 95.0;      //  (K)
-            double riskFreeRate = 0.05;     //  (r)
-            double volatility = 0.2;        //  (sigma)
-            double timeToMaturity = 1.0;    //  (T)
-            int accuracy = 20;              //  (n)
+            double spotPrice = 20.0;       //  (S)
+            double strikePrice = 21.0;      //  (K)
+            double timeToMaturity = 0.50;    //  (T)
+            double riskFreeRate = 0.12;     //  (r)
             double DividendYield = 0.0;     //  (q)
+            double volatility = 0.2;        //  (sigma)
+            int accuracy = 2;              //  (n)
 
             // Création de l'objet BlackSholes
-            var Bin = new Binomial(spotPrice, strikePrice, riskFreeRate, volatility, timeToMaturity, accuracy,DividendYield );
+            var Bin = new Binomial(spotPrice, strikePrice, timeToMaturity, volatility, riskFreeRate, accuracy, DividendYield );
             Console.WriteLine($"Calcul du prix de l'option avec le modèle binomial à {accuracy} étapes");
 
             Console.WriteLine($"K: {strikePrice}, S: {spotPrice}, r: {riskFreeRate}, sigma: {volatility}, T: {timeToMaturity}");
