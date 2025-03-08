@@ -17,3 +17,4 @@
 /var/home/adam/Documents/Option-Pricer/MyOptionPricer/obj/Debug/net9.0/MyOption.AE6D6D3D.Up2Date
 /var/home/adam/Documents/Option-Pricer/MyOptionPricer/obj/Debug/net9.0/MyOptionPricer.genruntimeconfig.cache
 /var/home/adam/Documents/Option-Pricer/MyOptionPricer/obj/Debug/net9.0/ref/MyOptionPricer.dll
+/var/home/adam/Documents/Option-Pricer/MyOptionPricer/bin/Debug/net9.0/Newtonsoft.Json.dll

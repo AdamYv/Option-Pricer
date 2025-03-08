@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj": {}
+    "/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj": {}
   },
   "projects": {
-    "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj": {
+    "/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
+        "projectUniqueName": "/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
         "projectName": "MyOptionPricer",
-        "projectPath": "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
+        "projectPath": "/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
         "packagesPath": "/home/adam/.nuget/packages/",
-        "outputPath": "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/obj/",
+        "outputPath": "/home/adam/Documents/Option-Pricer/MyOptionPricer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/adam/.nuget/NuGet/NuGet.Config"
@@ -48,6 +48,10 @@
             "MathNet.Numerics": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             },
             "Spectre.Console": {
               "target": "Package",
