@@ -20,7 +20,7 @@ public class BlackSholes {
         this.T = T;
     }
 
-    public double Call_BS(){
+    public double callPrice(){
         // Compute D1 and D2
         double sqrT = Math.Sqrt(T);
         double d1 = (Math.Log(S /K)+(r+sigma*sigma/2.0)*T) /sigma * sqrT;
@@ -35,7 +35,7 @@ public class BlackSholes {
         
     }
 
-    public double Put_BS(){
+    public double putPrice(){
     double sqrT = Math.Sqrt(T);
     double d1 = (Math.Log(S /K)+(r+sigma*sigma/2.0)*T)/sigma * sqrT;
 

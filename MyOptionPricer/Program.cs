@@ -7,40 +7,55 @@ namespace MyOptionPricer
     {
         static void Main(string[] args)
         {
-            string myBanner = File.ReadAllText("ascii_art.txt");
-         
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "ascii_art.txt");
+            string myBanner = File.ReadAllText(filePath);
             Console.WriteLine(myBanner);
-            Console.WriteLine(new string('-', 100));
+            Console.WriteLine(new string('=', 100));
 
-            // [ ] Objectif avoir une interfasse ou l'on entre le symbol la date d'expiration et le prix d'exercice
-            // [ ] On affiche le prix de l'option call ou put
-            
+            // Obtenir les paramètres de l'option via l'interface console
+            var optionParams = ConsoleInterface.GetOptionParametersFromConsole();
 
-            
+            // Création de l'objet Binomial pour l'option américaine
+            Binomial AmericanOption = new Binomial(
+                optionParams.SpotPrice,
+                optionParams.StrikePrice,
+                optionParams.TimeToMaturity,
+                optionParams.Volatility,
+                optionParams.RiskFreeRate,
+                optionParams.Accuracy,
+                optionParams.DividendeRate
+            //120,100,0.20,0.5,1,10,0.3
 
 
-            
-
-
-
-            // Paramètres de l'option
-            double spotPrice = 100.0;       // Prix actuel de l'actif sous-jacent (S)
-            double strikePrice = 95.0;      // Prix d'exercice (K)
-            double riskFreeRate = 0.05;     // Taux sans risque (r)
-            double volatility = 0.2;        // Volatilité (sigma)
-            double timeToMaturity = 1.0;    // Temps jusqu'à l'expiration en années (T)
-            int accuracy = 100;
-
-            // Création de l'objet BlackSholes
-            Binomial Bin = new Binomial(spotPrice, strikePrice, riskFreeRate, volatility, timeToMaturity, accuracy);
+            );
 
             // Calcul du prix de l'option call
-            double callPrice = Bin.Compute_Option(true);
-            Console.WriteLine($"Prix de l'option call : {callPrice:F4}");
+            double cPriceAmer = AmericanOption.callPrice();
+            Console.WriteLine($"Prix de l'option d'achat (call) américaine : {cPriceAmer:F2}");
 
             // Calcul du prix de l'option put
-            double putPrice =  Bin.Compute_Option(false);
-            Console.WriteLine($"Prix de l'option put : {putPrice:F4}");
+            double pPriceAmer = AmericanOption.putPrice();
+            Console.WriteLine($"Prix de l'option de vente (put) américaine : {pPriceAmer:F2}");
+
+            // Création de l'objet BlackSholes pour l'option européenne
+            BlackSholes EuroOpt = new BlackSholes(
+                optionParams.SpotPrice,
+                optionParams.StrikePrice,
+                optionParams.RiskFreeRate,
+                optionParams.Volatility,
+                optionParams.TimeToMaturity
+            );
+
+            // Calcul du prix de l'option call européenne
+            double cPriceEur = EuroOpt.callPrice();
+            Console.WriteLine($"Prix de l'option d'achat (call) européenne : {cPriceEur:F2}");
+
+            // Calcul du prix de l'option put européenne
+            double pPriceEur = EuroOpt.putPrice();
+            Console.WriteLine($"Prix de l'option de vente (put) européenne : {pPriceEur:F2}");
         }
+
+
+    
     }
 }
