@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+
 
 namespace MyOptionPricer
 {
@@ -41,7 +43,14 @@ namespace MyOptionPricer
 
                 // Afficher l'historique des valeurs
                 if (parameters.ContainsKey(key))
-                    Console.WriteLine($"{key}: {parameters[key]} [Appuyez sur Ctrl+Z pour modifier]");
+
+                Console.WriteLine($"{key}: {parameters[key]} [\nAppuyez sur Ctrl+Z pour modifier]");
+
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "ascii_art.txt");
+                string myBanner = File.ReadAllText(filePath);
+                Console.WriteLine(myBanner);
+                Console.WriteLine(new string('=', 100));
+                Console.WriteLine("Pour revenir en arrière, appuyez sur Ctrl+Z.");
 
                 try
                 {

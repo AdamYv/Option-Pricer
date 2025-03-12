@@ -37,3 +37,4 @@ C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug
 C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.genruntimeconfig.cache
 C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\ref\MyOptionPricer.dll
 C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\bin\Debug\net9.0\ascii_art.txt
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\bin\Debug\net9.0\Newtonsoft.Json.dll

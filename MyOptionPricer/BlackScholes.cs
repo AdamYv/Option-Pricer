@@ -1,54 +1,37 @@
-using System;
 using MathNet.Numerics.Distributions;
-namespace MyOptionPricer{
+using System;
 
-public class BlackSholes {
+namespace MyOptionPricer
+{
+	public class BlackSholes : OptionPricer
+	{
+		public BlackSholes(double S, double K, double r, double sigma, double T)
+			: base(S, K, r, sigma, T)
+		{
+		}
 
-    //[x]: Add the necessary attributes simplify the code reading
-    public double S { get; private set; }  
-        public double K { get; private set; }  
-        public double r { get; private set; }  
-        public double sigma { get; private set; }  
-        public double T { get; private set; }  
+		public override double CallPrice()
+		{
+			double sqrT = Math.Sqrt(T);
+			double d1 = (Math.Log(S / K) + (r + sigma * sigma / 2.0) * T) / (sigma * sqrT);
+			double d2 = d1 - sigma * sqrT;
 
+			double N_d1 = Normal.CDF(0.0, 1.0, d1);
+			double N_d2 = Normal.CDF(0.0, 1.0, d2);
 
-    public BlackSholes(double S, double K, double r, double sigma, double T){
-        this.S = S;
-        this.K = K;
-        this.r = r;
-        this.sigma = sigma;
-        this.T = T;
-    }
+			return S * N_d1 - K * Math.Exp(-r * T) * N_d2;
+		}
 
-    public double callPrice(){
-        // Compute D1 and D2
-        double sqrT = Math.Sqrt(T);
-        double d1 = (Math.Log(S /K)+(r+sigma*sigma/2.0)*T) /sigma * sqrT;
+		public override double PutPrice()
+		{
+			double sqrT = Math.Sqrt(T);
+			double d1 = (Math.Log(S / K) + (r + sigma * sigma / 2.0) * T) / (sigma * sqrT);
+			double d2 = d1 - sigma * sqrT;
 
-        double d2 = d1 - sigma * sqrT;
+			double N_d1 = Normal.CDF(0.0, 1.0, -d1);
+			double N_d2 = Normal.CDF(0.0, 1.0, -d2);
 
-        //For the normal Law we use N(0,1, x) to get the cumulative distribution function 
-        double N_d1 = Normal.CDF(0.0, 1.0, d1);
-        double N_d2 = Normal.CDF(00, 1.0, d2);
-
-        return S * N_d1 - K * Math.Exp(- r * T) * N_d2;
-        
-    }
-
-    public double putPrice(){
-    double sqrT = Math.Sqrt(T);
-    double d1 = (Math.Log(S /K)+(r+sigma*sigma/2.0)*T)/sigma * sqrT;
-
-    double d2 = d1 - sigma * sqrT;
-
-    double N_d1 = Normal.CDF(0.0, 1.0, -d1);
-    double N_d2 = Normal.CDF(00, 1.0, -d2);
-
-    return K * Math.Exp(- r * T) * N_d2 - S * N_d1;
-    }
-    
-
-
-
-}
+			return K * Math.Exp(-r * T) * N_d2 - S * N_d1;
+		}
+	}
 }

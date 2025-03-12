@@ -3,83 +3,65 @@ using MathNet.Numerics.Distributions;
 
 namespace MyOptionPricer
 {
-    public class Binomial(double S, double K, double T, double sigma, double r, int n, double q)
+    public class Binomial : OptionPricer
     {
-        private double Compute_Up()
+        private readonly int _n;   // Nombre d'étapes dans l'arbre binomial
+        private readonly double _q; // Taux de dividende
+
+        public Binomial(double S, double K, double T, double sigma, double r, int n, double q)
+            : base(S, K, r, sigma, T)
         {
-            double deltaT = T / n;
-            return Math.Exp(sigma * Math.Sqrt(deltaT));
+            _n = n;
+            _q = q;
         }
 
-        private double Compute_Down()
-        {
-            return 1.0 / Compute_Up();
-        }
+        public override double CallPrice() => ComputeOption(isCall: true);
+        public override double PutPrice() => ComputeOption(isCall: false);
 
-        private double computeRiskNeutralProbability()
+        private double ComputeOption(bool isCall)
         {
-            double deltaT = T / n;
-            double up = Compute_Up();
-            double expMinusQDeltaT = Math.Exp(-q * deltaT);
-            double expMinusRDeltaT = Math.Exp(-r * deltaT);
-            double numerator = up * expMinusQDeltaT - expMinusRDeltaT;
-            double denominator = up * up - 1;
-            return numerator / denominator;
-        }
-
-        private double[,] createTree()
-        {
-            // This method is part of the skeleton but not used in the current implementation.
-            // Returning a placeholder to maintain the structure.
-            return new double[0, 0];
-        }
-
-        public double Compute_Option(bool isCall)
-        {
-            double deltaT = T / n;
-            double up = Compute_Up();
-            double p0 = computeRiskNeutralProbability();
+            double deltaT = T / _n;
+            double up = ComputeUp();
+            double p0 = ComputeRiskNeutralProbability(up, deltaT);
             double p1 = Math.Exp(-r * deltaT) - p0;
 
-            double[] p = new double[n + 1];
+            double[] prices = new double[_n + 1];
 
-            // Initialize option values at expiration
-            for (int i = 0; i <= n; i++)
+            // Initialisation à l'expiration
+            for (int i = 0; i <= _n; i++)
             {
-                int exponent = 2 * i - n + 1;
-                double stockPrice = S * Math.Pow(up, exponent);
-                p[i] = isCall ? Math.Max(stockPrice - K, 0.0) : Math.Max(K - stockPrice, 0.0);
+                double stockPrice = S * Math.Pow(up, 2 * i - _n + 1);
+                prices[i] = isCall
+                    ? Math.Max(stockPrice - K, 0.0)
+                    : Math.Max(K - stockPrice, 0.0);
             }
 
-            // Backward induction to compute option price
-            for (int j = n - 1; j >= 0; j--)
+            // Induction à rebours
+            for (int j = _n - 1; j >= 0; j--)
             {
                 for (int i = 0; i <= j; i++)
                 {
-                    // Compute binomial value
-                    p[i] = p0 * p[i + 1] + p1 * p[i];
-
-                    // Compute exercise value
-                    int exponent = 2 * i - j + 1;
-                    double stockPrice = S * Math.Pow(up, exponent);
-                    double exercise = isCall ? (stockPrice - K) : (K - stockPrice);
-
-                    // American option: take maximum of binomial value and exercise value
-                    p[i] = Math.Max(p[i], exercise);
+                    prices[i] = p0 * prices[i + 1] + p1 * prices[i];
+                    double stockPrice = S * Math.Pow(up, 2 * i - j + 1);
+                    double exercise = isCall ? stockPrice - K : K - stockPrice;
+                    prices[i] = Math.Max(prices[i], exercise);
                 }
             }
 
-            return p[0];
+            return prices[0];
         }
 
-        public double CallPrice()
+        private double ComputeUp()
         {
-            return Compute_Option(true);
+            double deltaT = T / _n;
+            return Math.Exp(sigma * Math.Sqrt(deltaT));
         }
 
-        public double PutPrice()
+        private double ComputeRiskNeutralProbability(double up, double deltaT)
         {
-            return Compute_Option(false);
+            double expMinusQDeltaT = Math.Exp(-_q * deltaT);
+            double expMinusRDeltaT = Math.Exp(-r * deltaT);
+            return (up * expMinusQDeltaT - expMinusRDeltaT) / (up * up - 1);
         }
     }
 }
