@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyOptionPricer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+add473d93c7b970b0ac2c9e073a350be0b9d78c2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46272c99ef21792f98122b8c1ce800751fb7822a")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyOptionPricer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyOptionPricer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

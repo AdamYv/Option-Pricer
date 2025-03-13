@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace MyOptionPricer
 {
@@ -7,52 +6,65 @@ namespace MyOptionPricer
     {
         static void Main()
         {
-            
+            var (SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity, Accuracy, DividendeRate) =
+                ConsoleInterface.GetOptionParametersFromConsole();
 
-            // Obtenir les paramètres de l'option via l'interface console
-            var (SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity, Accuracy, DividendeRate) = ConsoleInterface.GetOptionParametersFromConsole();
-
-            // Création de l'objet Binomial pour l'option américaine
-            Binomial AmericanOption = new (
+            // Options américaines
+            Binomial AmericanOption = new(
                 SpotPrice,
                 StrikePrice,
                 TimeToMaturity,
                 Volatility,
                 RiskFreeRate,
                 Accuracy,
-                DividendeRate
-            //120,100,0.20,0.5,1,10,0.3
+                DividendeRate);
 
+            Console.WriteLine($"\n\nRappel des entrées : " +
+                $"\nPrix d'exercice : {StrikePrice} " +
+                $"\nPrix actuel : {SpotPrice}" +
+                $"\nTemps jusqu'à expiration : {TimeToMaturity} ans" +
+                $"\nVolatilité : {Volatility * 100}%" +
+                $"\nTaux sans risque : {RiskFreeRate * 100}%" +
+                $"\nPrécision (n) : {Accuracy}" +
+                $"\nDividende : {DividendeRate * 100}%\n");
 
-            );
-
-            // Calcul du prix de l'option call
+            // Calculs américains
             double cPriceAmer = AmericanOption.CallPrice();
-            Console.WriteLine($"Prix de l'option d'achat (call) américaine : {cPriceAmer:F2}");
+            Console.WriteLine($"\nPrix du call américain : {cPriceAmer:F2}");
+            DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), true);
 
-            // Calcul du prix de l'option put
             double pPriceAmer = AmericanOption.PutPrice();
-            Console.WriteLine($"Prix de l'option de vente (put) américaine : {pPriceAmer:F2}");
+            Console.WriteLine($"\nPrix du put américain : {pPriceAmer:F2}");
+            DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), false);
 
-            // Création de l'objet BlackSholes pour l'option européenne
-            BlackSholes EuroOpt = new (
+            // Options européennes
+            BlackSholes EuroOpt = new(
                 SpotPrice,
                 StrikePrice,
                 RiskFreeRate,
                 Volatility,
-                TimeToMaturity
-            );
+                TimeToMaturity);
 
-            // Calcul du prix de l'option call européenne
+            // Calculs européens
             double cPriceEur = EuroOpt.CallPrice();
-            Console.WriteLine($"Prix de l'option d'achat (call) européenne : {cPriceEur:F2}");
+            Console.WriteLine($"\nPrix du call européen : {cPriceEur:F2}");
+            DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), true);
 
-            // Calcul du prix de l'option put européenne
             double pPriceEur = EuroOpt.PutPrice();
-            Console.WriteLine($"Prix de l'option de vente (put) européenne : {pPriceEur:F2}");
+            Console.WriteLine($"\nPrix du put européen : {pPriceEur:F2}");
+            DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), false);
         }
 
+        static void DisplayGreeks(Greeks greeksCalculator, bool isCall)
+        {
+            var (delta, gamma, vega, theta, rho) = greeksCalculator.ComputeGreeks(isCall);
 
-    
+            Console.WriteLine("\nGrecs associés :");
+            Console.WriteLine($"• Delta: {delta,8:F4}  (Sensibilité au prix du sous-jacent)");
+            Console.WriteLine($"• Gamma: {gamma,8:F4}  (Sensibilité du Delta aux variations du sous-jacent)");
+            Console.WriteLine($"• Vega:  {vega,8:F4}  (Sensibilité à la volatilité)");
+            Console.WriteLine($"• Theta: {theta,8:F4}  (Décroissance temporelle)");
+            Console.WriteLine($"• Rho:   {rho,8:F4}  (Sensibilité aux taux d'intérêt)");
+        }
     }
 }

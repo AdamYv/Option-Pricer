@@ -15,7 +15,7 @@ namespace MyOptionPricer
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool GetConsoleMode(IntPtr handle, out uint mode);
 
-        private static bool _ctrlZPressed = false;
+        //private static bool _ctrlZPressed = false;
 
         // Méthode pour obtenir les paramètres de l'option via la console
         public static (double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity, int Accuracy, double DividendeRate) GetOptionParametersFromConsole()
