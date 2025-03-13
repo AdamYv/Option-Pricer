@@ -1,24 +1,29 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace MyOptionPricer
 {
     class Program
     {
-        static void Main()
+        public static async Task Main()
         {
-            var (SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity, Accuracy, DividendeRate) =
-                ConsoleInterface.GetOptionParametersFromConsole();
 
-            // Options américaines
-            Binomial AmericanOption = new(
-                SpotPrice,
-                StrikePrice,
-                TimeToMaturity,
-                Volatility,
-                RiskFreeRate,
-                Accuracy,
-                DividendeRate);
+            await AlphaVanAPI.Afficher();
 
+            //var (SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity, Accuracy, DividendeRate) =
+               // ConsoleInterface.GetOptionParametersFromConsole();
+
+            //DisplayInputs(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity, Accuracy, DividendeRate);
+
+            // Calculs et affichage des résultats pour l'option américaine
+            //CalculateAndDisplayAmericanOptionPrices(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity, Accuracy, DividendeRate);
+
+            // Calculs et affichage des résultats pour l'option européenne
+            //CalculateAndDisplayEuropeanOptionPrices(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity);
+        }
+
+        static void DisplayInputs(double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity, int Accuracy, double DividendeRate)
+        {
             Console.WriteLine($"\n\nRappel des entrées : " +
                 $"\nPrix d'exercice : {StrikePrice} " +
                 $"\nPrix actuel : {SpotPrice}" +
@@ -27,6 +32,12 @@ namespace MyOptionPricer
                 $"\nTaux sans risque : {RiskFreeRate * 100}%" +
                 $"\nPrécision (n) : {Accuracy}" +
                 $"\nDividende : {DividendeRate * 100}%\n");
+        }
+
+        static void CalculateAndDisplayAmericanOptionPrices(double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity, int Accuracy, double DividendeRate)
+        {
+            // Options américaines
+            Binomial AmericanOption = new(SpotPrice, StrikePrice, TimeToMaturity, Volatility, RiskFreeRate, Accuracy, DividendeRate);
 
             // Calculs américains
             double cPriceAmer = AmericanOption.CallPrice();
@@ -36,14 +47,12 @@ namespace MyOptionPricer
             double pPriceAmer = AmericanOption.PutPrice();
             Console.WriteLine($"\nPrix du put américain : {pPriceAmer:F2}");
             DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), false);
+        }
 
+        static void CalculateAndDisplayEuropeanOptionPrices(double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity)
+        {
             // Options européennes
-            BlackSholes EuroOpt = new(
-                SpotPrice,
-                StrikePrice,
-                RiskFreeRate,
-                Volatility,
-                TimeToMaturity);
+            BlackSholes EuroOpt = new(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity);
 
             // Calculs européens
             double cPriceEur = EuroOpt.CallPrice();
