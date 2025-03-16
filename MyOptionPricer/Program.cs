@@ -7,8 +7,12 @@ namespace MyOptionPricer
     {
         public static async Task Main()
         {
+            
+            
+            AsianOpt asian = new ();
+            await asian.GetDateNumber();
 
-            await AlphaVanAPI.Afficher();
+
 
             //var (SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity, Accuracy, DividendeRate) =
                // ConsoleInterface.GetOptionParametersFromConsole();
@@ -37,14 +41,14 @@ namespace MyOptionPricer
         static void CalculateAndDisplayAmericanOptionPrices(double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity, int Accuracy, double DividendeRate)
         {
             // Options américaines
-            Binomial AmericanOption = new(SpotPrice, StrikePrice, TimeToMaturity, Volatility, RiskFreeRate, Accuracy, DividendeRate);
+            AmericanOption AOpt = new(SpotPrice, StrikePrice, TimeToMaturity, Volatility, RiskFreeRate, Accuracy, DividendeRate);
 
             // Calculs américains
-            double cPriceAmer = AmericanOption.CallPrice();
+            double cPriceAmer = AOpt.CallPrice();
             Console.WriteLine($"\nPrix du call américain : {cPriceAmer:F2}");
             DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), true);
 
-            double pPriceAmer = AmericanOption.PutPrice();
+            double pPriceAmer = AOpt.PutPrice();
             Console.WriteLine($"\nPrix du put américain : {pPriceAmer:F2}");
             DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), false);
         }
@@ -52,14 +56,14 @@ namespace MyOptionPricer
         static void CalculateAndDisplayEuropeanOptionPrices(double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity)
         {
             // Options européennes
-            BlackSholes EuroOpt = new(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity);
+            EuropOpt EurOpt = new(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity);
 
             // Calculs européens
-            double cPriceEur = EuroOpt.CallPrice();
+            double cPriceEur = EurOpt.CallPrice();
             Console.WriteLine($"\nPrix du call européen : {cPriceEur:F2}");
             DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), true);
 
-            double pPriceEur = EuroOpt.PutPrice();
+            double pPriceEur = EurOpt.PutPrice();
             Console.WriteLine($"\nPrix du put européen : {pPriceEur:F2}");
             DisplayGreeks(new Greeks(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity), false);
         }

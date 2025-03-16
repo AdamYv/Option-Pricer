@@ -5,9 +5,9 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace MyOptionPricer
 {
-	public class BlackSholes : OptionPricer
+	public class EuropOpt : OptionPricer
 	{
-		public BlackSholes(double S, double K, double r, double sigma, double T)
+		public EuropOpt(double S, double K, double r, double sigma, double T)
 			: base(S, K, r, sigma, T)
 		{
 		}
@@ -48,7 +48,7 @@ namespace MyOptionPricer
         }
     }
 
-	public class Greeks : BlackSholes
+	public class Greeks : EuropOpt
 	{
         private readonly double d1;
         private readonly double d2;

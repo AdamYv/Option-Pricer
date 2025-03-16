@@ -3,12 +3,12 @@ using MathNet.Numerics.Distributions;
 
 namespace MyOptionPricer
 {
-    public class Binomial : OptionPricer
+    public class AmericanOption : OptionPricer
     {
-        private readonly int _n;   // Nombre d'étapes dans l'arbre binomial
+        private readonly int _n;   // Nombre d'etapes de l'arbre
         private readonly double _q; // Taux de dividende
 
-        public Binomial(double S, double K, double T, double sigma, double r, int n, double q)
+        public AmericanOption(double S, double K, double T, double sigma, double r, int n, double q)
             : base(S, K, r, sigma, T)
         {
             _n = n;
@@ -27,7 +27,7 @@ namespace MyOptionPricer
 
             double[] prices = new double[_n + 1];
 
-            // Initialisation à l'expiration
+            // Initialisation ï¿½ l'expiration
             for (int i = 0; i <= _n; i++)
             {
                 double stockPrice = S * Math.Pow(up, 2 * i - _n + 1);
@@ -36,7 +36,7 @@ namespace MyOptionPricer
                     : Math.Max(K - stockPrice, 0.0);
             }
 
-            // Induction à rebours
+            // Induction ï¿½ rebours
             for (int j = _n - 1; j >= 0; j--)
             {
                 for (int i = 0; i <= j; i++)

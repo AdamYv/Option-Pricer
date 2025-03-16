@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyOptionPricer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+407f185843d22ccd13d05f3dc1fe255a49884e40")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fcd42aac51be7af42a8f1c7cfb271c1b0876e745")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyOptionPricer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyOptionPricer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

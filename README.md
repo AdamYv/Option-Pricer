@@ -23,14 +23,10 @@ I am working on an Option Pricer as a personal project (American & European).
 
 ## Resources
 
-### Web & Personal Notes
 
-- Example without API: [Site de F. Longin](https://www.longin.fr/Ressources_Outils/Pricers/Actions/Call_put_standards_dividendes_continus/options_standards_actions_calls_puts_pricer.php)
-- Monte Carlo
-- The Greeks
-- American Option Model
-- Black-Scholes Model
-
-### Books
+### Books & Academic notes
 
 - [OPTIONS, FUTURES, AND OTHER DERIVATIVES - John C. Hull](http://lib.ysu.am/disciplines_bk/2b66030e0dd4c77b2bda437f6c1e5e66.pdf)
+
+- [Pricing Asian Options using Monte Carlo
+Methods Hongbin Zhang](https://www.diva-portal.org/smash/get/diva2:301070/FULLTEXT01.pdf)

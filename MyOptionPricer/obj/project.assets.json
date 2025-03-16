@@ -130,11 +130,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
+      "projectUniqueName": "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
       "projectName": "MyOptionPricer",
-      "projectPath": "/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
+      "projectPath": "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/MyOptionPricer.csproj",
       "packagesPath": "/home/adam/.nuget/packages/",
-      "outputPath": "/home/adam/Documents/Option-Pricer/MyOptionPricer/obj/",
+      "outputPath": "/var/home/adam/Documents/Option-Pricer/MyOptionPricer/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/adam/.nuget/NuGet/NuGet.Config"
