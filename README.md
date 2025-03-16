@@ -4,7 +4,7 @@
 
 ## Goal
 
-I am working on an Option Pricer as a personal project (American & European).
+An Option Pricer for American , European and Asian.
 
 ## Features in Progress
 
