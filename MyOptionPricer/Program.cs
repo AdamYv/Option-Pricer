@@ -30,7 +30,7 @@ namespace MyOptionPricer
 
             // Calculs et affichage des résultats pour l'option européenne
             //CalculateAndDisplayEuropeanOptionPrices(SpotPrice, StrikePrice, RiskFreeRate, Volatility, TimeToMaturity);
-        }
+        
 
         static void DisplayInputs(double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity, int Accuracy, double DividendeRate)
         {
