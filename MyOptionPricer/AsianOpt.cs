@@ -3,54 +3,81 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyOptionPricer
 {
-    public class AsianOpt
+
+
+    public class MonteCarloAsianPricer
     {
-    
-
-        public AsianOpt()
+        public async Task<double> PriceAsianOption(
+            string symbol,
+            double strike,
+            double riskFreeRate,
+            double maturityYears,
+            int simulations = 100000,
+            int timeSteps = 252)
         {
-            int countSimulations = 0;
-            double sommePayoffs = 0;
-        }
-        public async Task<int> GetDateNumber()
-        {
-            // Appel de l'API pour récupérer les données JSON
-            var data = await AlphaVanAPI.GetTimeSeriesData("IBM");
+            var historicalData = await AlphaVanAPI.GetHistoricalData(symbol);
+            var volatility = AlphaVanAPI.CalculateVolatility(historicalData);
+            var spotPrice = historicalData.Last().Close;
 
-            // Parser le JSON
-            using JsonDocument doc = JsonDocument.Parse(data);
-            JsonElement root = doc.RootElement;
+            var rand = new Random();
+            double totalPayoff = 0;
+            double dt = maturityYears / timeSteps;
+            double drift = (riskFreeRate - 0.5 * Math.Pow(volatility, 2)) * dt;
 
-            // Vérifier si la clé "Time Series (Daily)" existe
-            if (root.TryGetProperty("Time Series (Daily)", out JsonElement timeSeries))
+            for (int i = 0; i < simulations; i++)
             {
-                int count = 0;
+                var path = GeneratePath(spotPrice, drift, volatility, dt, timeSteps, rand);
+                totalPayoff += Math.Max(path.Average() - strike, 0);
+            }
 
-                // Parcourir les entrées du JSON
-                foreach (JsonProperty dataEntry in timeSeries.EnumerateObject())
-                {
-                    string date = dataEntry.Name; // La clé est la date (ex: "2024-10-21")
+            return Math.Exp(-riskFreeRate * maturityYears) * (totalPayoff / simulations);
+        }
 
-                    // Vérifier si la date commence par "2024-" ou "2025-"
-                    if (date.StartsWith("2024-") || date.StartsWith("2025-"))
-                    {
-                        count++;
-                    }
-                }
+        private double[] GeneratePath(double S0, double drift, double vol, double dt, int steps, Random rand)
+        {
+            var path = new double[steps];
+            double current = S0;
 
-                return count;
+            for (int i = 0; i < steps; i++)
+            {
+                double dW = Math.Sqrt(dt) * NormInv(rand.NextDouble());
+                current *= Math.Exp(drift + vol * dW);
+                path[i] = current;
+            }
+            return path;
+        }
+
+        private double NormInv(double p)
+        {
+            // Algorithme de Moro pour transformation inverse normale
+            double[] a = { 2.50662823884, -18.61500062529, 41.39119773534, -25.44106049637 };
+            double[] b = { -8.47351093090, 23.08336743743, -21.06224101826, 3.13082909833 };
+            double[] c = { 0.3374754822726147, 0.9761690190917186, 0.1607979714918209, 0.0276438810333863,
+                          0.0038405729373609, 0.0003951896511919, 0.0000321767881768, 0.0000002888167364,
+                          0.0000003960315187 };
+
+            if (p <= 0 || p >= 1) throw new ArgumentException("p doit être entre 0 et 1");
+
+            double x = p - 0.5;
+            if (Math.Abs(x) < 0.42)
+            {
+                double y = x * x;
+                return x * (((a[3] * y + a[2]) * y + a[1]) * y + a[0]) /
+                        ((((b[3] * y + b[2]) * y + b[1]) * y + b[0]) * y + 1.0);
             }
             else
             {
-                Console.WriteLine("Erreur : impossible de trouver 'Time Series (Daily)' dans la réponse JSON.");
-                return 0;
+                double y = Math.Log(-Math.Log(p < 0.5 ? p : 1 - p));
+                double num = c[0];
+                for (int i = 1; i < c.Length; i++) num += c[i] * Math.Pow(y, i);
+                return (p < 0.5 ? -num : num);
             }
         }
-    
-    
-    
     }
+
+
 }

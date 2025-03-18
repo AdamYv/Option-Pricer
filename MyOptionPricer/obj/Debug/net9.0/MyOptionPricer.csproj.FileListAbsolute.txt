@@ -40,3 +40,12 @@ C:/Users/AdamG/Documents/2024-2025/Pricer/Option-Pricer/MyOptionPricer/bin/Debug
 C:/Users/AdamG/Documents/2024-2025/Pricer/Option-Pricer/MyOptionPricer/bin/Debug/net9.0/Newtonsoft.Json.dll
 /var/home/adam/Documents/Option-Pricer/MyOptionPricer/bin/Debug/net9.0/ascii_art.txt
 /var/home/adam/Documents/Option-Pricer/MyOptionPricer/bin/Debug/net9.0/Newtonsoft.Json.dll
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.csproj.AssemblyReference.cache
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.AssemblyInfoInputs.cache
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.AssemblyInfo.cs
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.csproj.CoreCompileInputs.cache
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.sourcelink.json
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.dll
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\refint\MyOptionPricer.dll
+C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\obj\Debug\net9.0\MyOptionPricer.pdb

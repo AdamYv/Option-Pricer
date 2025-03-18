@@ -7,10 +7,16 @@ namespace MyOptionPricer
     {
         public static async Task Main()
         {
-            
-            
-            AsianOpt asian = new ();
-            await asian.GetDateNumber();
+
+            var pricer = new MonteCarloAsianPricer();
+            double price = await pricer.PriceAsianOption(
+                symbol: "IBM",
+                strike: 150.0,
+                riskFreeRate: 0.05,
+                maturityYears: 1.0);
+
+            Console.WriteLine($"Prix de l'option asiatique : {price:N2}");
+        }            
 
 
 
