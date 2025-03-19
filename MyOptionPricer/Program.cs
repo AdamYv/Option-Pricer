@@ -10,12 +10,12 @@ namespace MyOptionPricer
 
             var pricer = new MonteCarloAsianPricer();
             double price = await pricer.PriceAsianOption(
-                symbol: "IBM",
+                symbol: "AAPL",
                 strike: 150.0,
                 riskFreeRate: 0.05,
                 maturityYears: 1.0);
 
-            Console.WriteLine($"Prix de l'option asiatique : {price:N2}");
+            Console.WriteLine($"Prix de l'option asiatique : {price:N2} , de AAPL");
         }            
 
 

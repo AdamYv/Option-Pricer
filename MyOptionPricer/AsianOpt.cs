@@ -16,7 +16,7 @@ namespace MyOptionPricer
             double strike,
             double riskFreeRate,
             double maturityYears,
-            int simulations = 100000,
+            int simulations = 10000,
             int timeSteps = 252)
         {
             var historicalData = await AlphaVanAPI.GetHistoricalData(symbol);

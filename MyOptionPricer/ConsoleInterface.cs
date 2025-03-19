@@ -8,16 +8,14 @@ namespace MyOptionPricer
 {
     class ConsoleInterface
     {
-        // Configuration pour intercepter Ctrl+Z
+        // Configuration pour intercepter Ctrl+Z 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint mode);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool GetConsoleMode(IntPtr handle, out uint mode);
 
-        //private static bool _ctrlZPressed = false;
 
-        // Méthode pour obtenir les paramètres de l'option via la console
         public static (double SpotPrice, double StrikePrice, double RiskFreeRate, double Volatility, double TimeToMaturity, int Accuracy, double DividendeRate) GetOptionParametersFromConsole()
         {
             ConfigureConsoleForCtrlZ();
@@ -41,7 +39,7 @@ namespace MyOptionPricer
                 Console.Clear();
                 var (key, readFunction) = steps[currentStep];
 
-                // Afficher l'historique des valeurs
+                // Afficher historique 
                 if (parameters.ContainsKey(key))
 
                 Console.WriteLine($"{key}: {parameters[key]} [\nAppuyez sur Ctrl+Z pour modifier]");
@@ -59,7 +57,7 @@ namespace MyOptionPricer
                     history.Push(currentStep);
                     currentStep++;
                 }
-                catch (OperationCanceledException) // Ctrl+Z détecté
+                catch (OperationCanceledException) 
                 {
                     if (history.Count > 0)
                     {
@@ -69,7 +67,6 @@ namespace MyOptionPricer
                 }
             }
 
-            // Saisie de la précision
             int accuracy = ReadPositiveInt("Précision (nombre de pas, n) : ");
 
             return (
@@ -83,7 +80,6 @@ namespace MyOptionPricer
             );
         }
 
-        // Méthode unifiée pour lire les valeurs avec gestion de Ctrl+Z
         private static double ReadValueWithNavigation(string prompt)
         {
             Console.Write(prompt);
@@ -96,7 +92,6 @@ namespace MyOptionPricer
             }
         }
 
-        // Méthode pour lire les pourcentages
         private static double ReadPercentageWithNavigation(string prompt)
         {
             double value = ReadValueWithNavigation(prompt);
