@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "RQH+9jD0KYE=",
+  "dgSpecHash": "x2pSvoi+Y3M=",
   "success": true,
   "projectFilePath": "C:\\Users\\AdamG\\Documents\\2024-2025\\Pricer\\Option-Pricer\\MyOptionPricer\\MyOptionPricer.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\AdamG\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

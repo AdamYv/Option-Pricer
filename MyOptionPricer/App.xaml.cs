@@ -33,6 +33,7 @@ public partial class App : Application
 
         if (!createdNew)
         {
+       
             MessageBox.Show("Une instance de l'application est déjà en cours d'exécution.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown();
             return;

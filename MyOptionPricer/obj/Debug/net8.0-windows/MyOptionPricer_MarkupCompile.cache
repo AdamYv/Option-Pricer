@@ -11,10 +11,10 @@ false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\AdamG\Documents\2024-2025\Pricer\Option-Pricer\MyOptionPricer\App.xaml
 6-1696383649
-1-1921972090
-8-343135016
-1981839832580
+2-232541327
+1360624602
+202846128350
 AmerForm.xaml;AsianForm.xaml;CustomMessageBox.xaml;EuroForm.xaml;MainWindow.xaml;Themes\Generic.xaml;
 
-False
+True
 

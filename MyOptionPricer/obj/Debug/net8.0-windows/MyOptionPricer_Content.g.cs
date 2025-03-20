@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("content/asia.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("content/icon.ico")]
 
 

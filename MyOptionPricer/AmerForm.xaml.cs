@@ -24,5 +24,19 @@ namespace MyOptionPricer
         {
             InitializeComponent();
         }
+
+
+
+
+
+        private void Button_Copie(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Compute(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
