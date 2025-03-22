@@ -29,14 +29,52 @@ namespace MyOptionPricer
 
 
 
-        private void Button_Copie(object sender, RoutedEventArgs e)
+        private void Button_Compute(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                // Récupération des valeurs
+                double S = double.Parse(txtSpot.Text);
+                double K = double.Parse(txtStrike.Text);
+                double r = double.Parse(txtRiskFree.Text) / 100; // Conversion %
+                double sigma = double.Parse(txtVolatility.Text) / 100;
+                double T = double.Parse(txtMaturity.Text);
+                int n = int.Parse(txtAccuracy.Text);
+                double q = double.Parse(txtDividend.Text) / 100;
+
+                // Création de l'option
+                var option = new AmericanOption(
+                    S, K, T, sigma, r, n, q
+                );
+
+                // Calcul du prix selon le type
+                double price = radioCall.IsChecked == true ?
+                    option.CallPrice() :
+                    option.PutPrice();
+
+                // Affichage du résultat
+                txtResult.Text = $"{price:F4}";
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Veuillez entrer des nombres valides");
+            }
+            catch (OverflowException)
+            {
+                MessageBox.Show("Les valeurs saisies sont trop grandes");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur inattendue: {ex.Message}");
+            }
+
+           
 
         }
 
-        private void Button_Compute(object sender, RoutedEventArgs e)
+        private void Button_Copie(object sender, RoutedEventArgs e)
         {
-
+            Clipboard.SetText(txtResult.Text);
         }
     }
 }

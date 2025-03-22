@@ -69,7 +69,7 @@ namespace MyOptionPricer {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyOptionPricer;V1.0.0.0;component/custommessagebox.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MyOptionPricer;component/custommessagebox.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\CustomMessageBox.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
