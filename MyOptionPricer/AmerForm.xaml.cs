@@ -39,7 +39,7 @@ namespace MyOptionPricer
                 double r = double.Parse(txtRiskFree.Text) / 100; // Conversion %
                 double sigma = double.Parse(txtVolatility.Text) / 100;
                 double T = double.Parse(txtMaturity.Text);
-                int n = int.Parse(txtAccuracy.Text);
+                int n = (int)sliderAccuracy.Value; 
                 double q = double.Parse(txtDividend.Text) / 100;
 
                 // Création de l'option
@@ -53,7 +53,7 @@ namespace MyOptionPricer
                     option.PutPrice();
 
                 // Affichage du résultat
-                txtResult.Text = $"{price:F4}";
+                txtResult.Text = $"{price:F4} $";
             }
             catch (FormatException)
             {
