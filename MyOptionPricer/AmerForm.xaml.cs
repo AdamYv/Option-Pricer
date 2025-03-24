@@ -76,5 +76,7 @@ namespace MyOptionPricer
         {
             Clipboard.SetText(txtResult.Text);
         }
+
+        
     }
 }

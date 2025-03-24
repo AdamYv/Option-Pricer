@@ -1,94 +1,112 @@
 ﻿using System;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
-namespace MyOptionPricer
+public class AsianOpt
 {
-    public enum OptionType
+    public enum AverageType { Arithmetic } // J'ai retire geometric ici 
+
+    // Paramètres financiers
+    public double S0 { get; }
+    public double K { get; }
+    public double R { get; }
+    public double Sigma { get; }
+    public double T { get; }
+
+    // Paramètres de simulation
+    public int TimeSteps { get; }
+    public int Simulations { get; }
+    public AverageType AvgType { get; }
+
+    private AsianOpt(double s0, double k, double r, double sigma, double t, int steps, int sims, AverageType avgType)
     {
-        Call,
-        Put
+        S0 = s0;
+        K = k;
+        R = r;
+        Sigma = sigma;
+        T = t;
+        TimeSteps = steps;
+        Simulations = sims;
+        AvgType = avgType;
     }
 
-    public class AsianOpt
+    public static async Task<AsianOpt> CreateAsync(
+        string symbol,
+        int daysHistorical,
+        double strike,
+        double maturityYears,
+        double riskFreeRate,
+        int simulations,
+        AverageType avgType = AverageType.Arithmetic,
+        double? impliedVol = null)
     {
-        public async Task<double> PriceAsianOption(
-            string symbol,
-            double strike,
-            double riskFreeRate,
-            double maturityYears,
-            OptionType optionType, // New parameter for call/put
-            int simulations = 10000,
-            int timeSteps = 252 // 252 trading days per year
-            )
-        {
-            var historicalData = await AlphaVanAPI.GetHistoricalData(symbol);
-            var volatility = AlphaVanAPI.CalculateVolatility(historicalData);
-            var spotPrice = historicalData.Last().Close;
+        var data = await AlphaVanAPI.GetHistoricalData(symbol, daysHistorical);
+        if (data == null || !data.Any())
+            throw new ArgumentException("Erreur API : données historiques non disponibles");
 
-            var rand = new Random();
-            double totalPayoff = 0;
-            double dt = maturityYears / timeSteps;
-            double drift = (riskFreeRate - 0.5 * Math.Pow(volatility, 2)) * dt;
+        double s0 = data[0].Close; // Dernière clôture
+        double sigma = impliedVol ?? AlphaVanAPI.CalculateVolatility(data);
+        int steps = (int)(maturityYears * 252); // 252 jours/an
 
-            for (int i = 0; i < simulations; i++)
+        return new AsianOpt(s0, strike, riskFreeRate, sigma, maturityYears, steps, simulations, avgType);
+    }
+
+    public double CallPrice() => MonteCarlo(isCall: true);
+    public double PutPrice() => MonteCarlo(isCall: false);
+
+    private double MonteCarlo(bool isCall)
+    {
+        double dt = T / TimeSteps;
+        double totalPayoff = 0.0;
+        object lockObj = new object();
+
+        Parallel.For(0, Simulations,
+            () => new LocalState { Random = new Random(), Payoff = 0.0 },
+            (sim, state, local) =>
             {
-                var path = GeneratePath(spotPrice, drift, volatility, dt, timeSteps, rand);
-                double averagePrice = path.Average();
+                double S = S0;
+                var path = new double[TimeSteps];
 
-                // Modified payoff calculation for call/put
-                double payoff = optionType == OptionType.Call
-                    ? Math.Max(averagePrice - strike, 0)
-                    : Math.Max(strike - averagePrice, 0);
+                for (int j = 0; j < TimeSteps; j++)
+                {
+                    double Z = local.Random.NextGaussian();
+                    S *= Math.Exp((R - 0.5 * Sigma * Sigma) * dt + Sigma * Math.Sqrt(dt) * Z);
+                    path[j] = S;
+                }
 
-                totalPayoff += payoff;
-            }
+                double avg = (AvgType == AverageType.Arithmetic) ?
+                    path.Average() :
+                    Math.Exp(path.Sum(x => Math.Log(x)) / path.Length);
 
-            return Math.Exp(-riskFreeRate * maturityYears) * (totalPayoff / simulations);
-        }
+                local.Payoff += isCall ?
+                    Math.Max(avg - K, 0) :
+                    Math.Max(K - avg, 0);
 
-        private double[] GeneratePath(double S0, double drift, double vol, double dt, int steps, Random rand)
-        {
-            var path = new double[steps];
-            double current = S0;
-
-            for (int i = 0; i < steps; i++)
+                return local;
+            },
+            local =>
             {
-                double dW = Math.Sqrt(dt) * NormInv(rand.NextDouble());
-                current *= Math.Exp(drift + vol * dW);
-                path[i] = current;
-            }
-            return path;
-        }
+                lock (lockObj)
+                    totalPayoff += local.Payoff;
+            });
 
-        private double NormInv(double p)
-        {
-            // Moro's algorithm for normal inverse transformation
-            double[] a = { 2.50662823884, -18.61500062529, 41.39119773534, -25.44106049637 };
-            double[] b = { -8.47351093090, 23.08336743743, -21.06224101826, 3.13082909833 };
-            double[] c = { 0.3374754822726147, 0.9761690190917186, 0.1607979714918209, 0.0276438810333863,
-                          0.0038405729373609, 0.0003951896511919, 0.0000321767881768, 0.0000002888167364,
-                          0.0000003960315187 };
+        return Math.Round(Math.Exp(-R * T) * (totalPayoff / Simulations), 4);
+    }
 
-            if (p <= 0 || p >= 1) throw new ArgumentException("p must be between 0 and 1");
+    private class LocalState
+    {
+        public Random Random { get; set; }
+        public double Payoff { get; set; }
+    }
+}
 
-            double x = p - 0.5;
-            if (Math.Abs(x) < 0.42)
-            {
-                double y = x * x;
-                return x * (((a[3] * y + a[2]) * y + a[1]) * y + a[0]) /
-                        ((((b[3] * y + b[2]) * y + b[1]) * y + b[0]) * y + 1.0);
-            }
-            else
-            {
-                double y = Math.Log(-Math.Log(p < 0.5 ? p : 1 - p));
-                double num = c[0];
-                for (int i = 1; i < c.Length; i++) num += c[i] * Math.Pow(y, i);
-                return (p < 0.5 ? -num : num);
-            }
-        }
+public static class RandomExtensions
+{
+    public static double NextGaussian(this Random rand)
+    {
+        double u1 = 1.0 - rand.NextDouble();
+        double u2 = 1.0 - rand.NextDouble();
+        return Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
     }
 }
