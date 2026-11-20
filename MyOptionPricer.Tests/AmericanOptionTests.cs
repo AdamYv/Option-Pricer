@@ -1,0 +1,37 @@
+using MyOptionPricer;
+using Xunit;
+
+public class AmericanOptionTests
+{
+    [Fact]
+    public void CallWithoutDividendMatchesBlackScholes()
+    {
+        // Sans dividende, l'exercice anticipé d'un call n'est jamais optimal
+        double eu = new EuropOpt(100, 100, 0.05, 0.2, 1).CallPrice();
+        double am = new AmericanOption(100, 100, 1, 0.2, 0.05, 1000, 0).CallPrice();
+        Assert.Equal(eu, am, 2);
+    }
+
+    [Fact]
+    public void PutIsWorthAtLeastEuropeanPut()
+    {
+        double eu = new EuropOpt(100, 100, 0.05, 0.2, 1).PutPrice();
+        double am = new AmericanOption(100, 100, 1, 0.2, 0.05, 1000, 0).PutPrice();
+        Assert.True(am > eu, $"américaine {am} <= européenne {eu}");
+    }
+
+    [Fact]
+    public void PutMatchesReferenceValue()
+    {
+        // Put américain S=K=100, r=5 %, sigma=20 %, T=1 : environ 6,09 (arbre CRR convergé)
+        double am = new AmericanOption(100, 100, 1, 0.2, 0.05, 2000, 0).PutPrice();
+        Assert.Equal(6.09, am, 2);
+    }
+
+    [Fact]
+    public void DeepInTheMoneyPutIsAtLeastIntrinsicValue()
+    {
+        double am = new AmericanOption(50, 100, 1, 0.2, 0.05, 500, 0).PutPrice();
+        Assert.True(am >= 50 - 1e-9);
+    }
+}

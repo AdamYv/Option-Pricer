@@ -30,7 +30,7 @@ namespace MyOptionPricer
             // Initialisation � l'expiration
             for (int i = 0; i <= _n; i++)
             {
-                double stockPrice = S * Math.Pow(up, 2 * i - _n + 1);
+                double stockPrice = S * Math.Pow(up, 2 * i - _n);
                 prices[i] = isCall
                     ? Math.Max(stockPrice - K, 0.0)
                     : Math.Max(K - stockPrice, 0.0);
@@ -42,7 +42,7 @@ namespace MyOptionPricer
                 for (int i = 0; i <= j; i++)
                 {
                     prices[i] = p0 * prices[i + 1] + p1 * prices[i];
-                    double stockPrice = S * Math.Pow(up, 2 * i - j + 1);
+                    double stockPrice = S * Math.Pow(up, 2 * i - j);
                     double exercise = isCall ? stockPrice - K : K - stockPrice;
                     prices[i] = Math.Max(prices[i], exercise);
                 }

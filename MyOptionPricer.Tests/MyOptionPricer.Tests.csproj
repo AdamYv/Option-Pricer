@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Tests des moteurs de pricing, indépendants de l'interface WPF :
+       les fichiers de calcul sont liés depuis MyOptionPricer/ pour tourner sur
+       n'importe quel OS (dotnet test). -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\MyOptionPricer\BOptionPricer.cs" Link="Pricing\BOptionPricer.cs" />
+    <Compile Include="..\MyOptionPricer\BEuropOpt.cs" Link="Pricing\BEuropOpt.cs" />
+    <Compile Include="..\MyOptionPricer\BAmericanOption.cs" Link="Pricing\BAmericanOption.cs" />
+    <Compile Include="..\MyOptionPricer\BAsianOpt.cs" Link="Pricing\BAsianOpt.cs" />
+    <Compile Include="..\MyOptionPricer\BAlphaVanAPI.cs" Link="Pricing\BAlphaVanAPI.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+</Project>
