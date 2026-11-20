@@ -54,6 +54,14 @@ namespace MyOptionPricer
 
                 // Affichage du résultat
                 txtResult.Text = $"{price:F4} $";
+
+                // Calcul et affichage des Greeks (différences finies sur l'arbre)
+                var greeks = option.ComputeGreeks(radioCall.IsChecked == true);
+                txtDelta.Text = $"{greeks.Delta:F4}";
+                txtGamma.Text = $"{greeks.Gamma:F4}";
+                txtTheta.Text = $"{greeks.Theta:F4}";
+                txtVega.Text = $"{greeks.Vega:F4}";
+                txtRho.Text = $"{greeks.Rho:F4}";
             }
             catch (FormatException)
             {
@@ -74,7 +82,12 @@ namespace MyOptionPricer
 
         private void Button_Copie(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(txtResult.Text);
+            Clipboard.SetText($"Prix : {txtResult.Text}\n" +
+                              $"Δ (Delta) : {txtDelta.Text}\n" +
+                              $"Γ (Gamma) : {txtGamma.Text}\n" +
+                              $"Θ (Theta) : {txtTheta.Text}\n" +
+                              $"ν (Vega) : {txtVega.Text}\n" +
+                              $"ρ (Rho) : {txtRho.Text}");
         }
 
         

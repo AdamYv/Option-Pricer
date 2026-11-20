@@ -18,6 +18,21 @@ namespace MyOptionPricer
         public override double CallPrice() => ComputeOption(isCall: true);
         public override double PutPrice() => ComputeOption(isCall: false);
 
+        /// <summary>
+        /// Grecs par différences finies sur l'arbre binomial (même nombre d'étapes).
+        /// Theta par année, Vega et Rho pour une variation de 1 (100 %).
+        /// </summary>
+        public (double Delta, double Gamma, double Theta, double Vega, double Rho) ComputeGreeks(bool isCall)
+        {
+            double Price(double s, double vol, double rate, double t)
+            {
+                var bumped = new AmericanOption(s, K, t, vol, rate, _n, _q);
+                return isCall ? bumped.CallPrice() : bumped.PutPrice();
+            }
+
+            return FiniteDifferenceGreeks.Compute(Price, S, sigma, r, T);
+        }
+
         private double ComputeOption(bool isCall)
         {
             double deltaT = T / _n;

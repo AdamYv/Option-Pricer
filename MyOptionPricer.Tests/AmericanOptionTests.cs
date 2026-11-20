@@ -35,3 +35,30 @@ public class AmericanOptionTests
         Assert.True(am >= 50 - 1e-9);
     }
 }
+
+public class AmericanGreeksTests
+{
+    [Fact]
+    public void CallGreeksWithoutDividendMatchEuropeanClosedForm()
+    {
+        var closed = new Greeks(100, 100, 0.05, 0.2, 1).ComputeGreeks(true);
+        var tree = new AmericanOption(100, 100, 1, 0.2, 0.05, 1000, 0).ComputeGreeks(true);
+
+        Assert.Equal(closed.Delta, tree.Delta, 2);
+        Assert.Equal(closed.Gamma, tree.Gamma, 2);
+        Assert.InRange(tree.Vega, closed.Vega - 0.5, closed.Vega + 0.5);
+        Assert.InRange(tree.Rho, closed.Rho - 0.5, closed.Rho + 0.5);
+        Assert.InRange(tree.Theta, closed.Theta - 0.5, closed.Theta + 0.5);
+    }
+
+    [Fact]
+    public void PutGreeksHaveExpectedSigns()
+    {
+        var g = new AmericanOption(100, 100, 1, 0.2, 0.05, 1000, 0).ComputeGreeks(false);
+        Assert.InRange(g.Delta, -1, 0);
+        Assert.True(g.Gamma > 0);
+        Assert.True(g.Vega > 0);
+        Assert.True(g.Rho < 0);
+        Assert.True(g.Theta < 0);
+    }
+}
