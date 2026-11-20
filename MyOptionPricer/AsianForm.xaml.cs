@@ -42,17 +42,21 @@ namespace MyOptionPricer
                     simulations
                 );
 
-                // Exécuter le pricing sur un thread de fond
-                double price = await Task.Run(() =>
-                    radioCall.Dispatcher.Invoke(() =>
-                        radioCall.IsChecked == true ? option.CallPrice() : option.PutPrice()
-                    )
+                // Exécuter le pricing et les Greeks sur un thread de fond
+                bool isCall = radioCall.IsChecked == true;
+                var (price, greeks) = await Task.Run(() =>
+                    (isCall ? option.CallPrice() : option.PutPrice(), option.ComputeGreeks(isCall))
                 );
 
                 // Mise à jour de l'UI sur le thread principal
                 Dispatcher.Invoke(() =>
                 {
                     txtPrice.Text = $"{price.ToString("F4")}$";
+                    txtDelta.Text = $"{greeks.Delta:F4}";
+                    txtGamma.Text = $"{greeks.Gamma:F4}";
+                    txtTheta.Text = $"{greeks.Theta:F4}";
+                    txtVega.Text = $"{greeks.Vega:F4}";
+                    txtRho.Text = $"{greeks.Rho:F4}";
                 });
             }
             catch (Exception ex)
@@ -106,7 +110,12 @@ namespace MyOptionPricer
 
         private void Button_Copie(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(txtPrice.Text);
+            Clipboard.SetText($"Prix : {txtPrice.Text}\n" +
+                              $"Δ (Delta) : {txtDelta.Text}\n" +
+                              $"Γ (Gamma) : {txtGamma.Text}\n" +
+                              $"Θ (Theta) : {txtTheta.Text}\n" +
+                              $"ν (Vega) : {txtVega.Text}\n" +
+                              $"ρ (Rho) : {txtRho.Text}");
         }
 
 

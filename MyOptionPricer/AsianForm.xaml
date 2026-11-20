@@ -137,6 +137,30 @@
                 <TextBlock HorizontalAlignment="Center" x:Name="txtPrice" FontSize="20"> </TextBlock>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0 20">
+                <TextBlock FontWeight="Bold" FontSize="20">Greeks :</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" FontSize="16" Margin="5">Δ (Delta): </TextBlock>
+                    <TextBlock x:Name="txtDelta" FontSize="16" Margin="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" FontSize="16" Margin="5">Γ (Gamma): </TextBlock>
+                    <TextBlock x:Name="txtGamma" FontSize="16" Margin="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" FontSize="16" Margin="5">Θ (Theta): </TextBlock>
+                    <TextBlock x:Name="txtTheta" FontSize="16" Margin="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" FontSize="16" Margin="5">ν (Vega): </TextBlock>
+                    <TextBlock x:Name="txtVega" FontSize="16" Margin="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" FontSize="16" Margin="5">ρ (Rho): </TextBlock>
+                    <TextBlock x:Name="txtRho" FontSize="16" Margin="5"/>
+                </StackPanel>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal">
                 <Button Content="Compute" FontSize="20" Margin="10" Padding="10 5" Click="Button_Compute"/>
                 <Button Content="Copie" FontSize="20" Margin="10" Padding="10 5" Click="Button_Copie"/>

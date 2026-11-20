@@ -19,7 +19,12 @@ public class AsianOpt
     public int Simulations { get; }
     public AverageType AvgType { get; }
 
-    private AsianOpt(double s0, double k, double r, double sigma, double t, int steps, int sims, AverageType avgType)
+    // Graine des tirages : le prix et les Grecs réutilisent les mêmes trajectoires
+    // (nombres aléatoires communs), ce qui stabilise les différences finies.
+    public int Seed { get; }
+
+    public AsianOpt(double s0, double k, double r, double sigma, double t, int steps, int sims,
+                    AverageType avgType = AverageType.Arithmetic, int? seed = null)
     {
         S0 = s0;
         K = k;
@@ -29,6 +34,7 @@ public class AsianOpt
         TimeSteps = steps;
         Simulations = sims;
         AvgType = avgType;
+        Seed = seed ?? Random.Shared.Next();
     }
 
     public static async Task<AsianOpt> CreateAsync(
@@ -52,26 +58,41 @@ public class AsianOpt
         return new AsianOpt(s0, strike, riskFreeRate, sigma, maturityYears, steps, simulations, avgType);
     }
 
-    public double CallPrice() => MonteCarlo(isCall: true);
-    public double PutPrice() => MonteCarlo(isCall: false);
+    public double CallPrice() => Math.Round(MonteCarlo(true, S0, Sigma, R, T), 4);
+    public double PutPrice() => Math.Round(MonteCarlo(false, S0, Sigma, R, T), 4);
 
-    private double MonteCarlo(bool isCall)
+    /// <summary>
+    /// Grecs par différences finies sur le Monte-Carlo, avec les mêmes tirages
+    /// pour chaque prix choqué. Le nombre de pas de temps reste fixe.
+    /// Theta par année, Vega et Rho pour une variation de 1 (100 %).
+    /// </summary>
+    public (double Delta, double Gamma, double Theta, double Vega, double Rho) ComputeGreeks(bool isCall)
     {
-        double dt = T / TimeSteps;
+        return MyOptionPricer.FiniteDifferenceGreeks.Compute(
+            (s, vol, rate, t) => MonteCarlo(isCall, s, vol, rate, t),
+            S0, Sigma, R, T);
+    }
+
+    private double MonteCarlo(bool isCall, double s0, double sigma, double r, double t)
+    {
+        double dt = t / TimeSteps;
         double totalPayoff = 0.0;
         object lockObj = new object();
 
         Parallel.For(0, Simulations,
-            () => new LocalState { Random = new Random(), Payoff = 0.0 },
+            () => new LocalState { Payoff = 0.0 },
             (sim, state, local) =>
             {
-                double S = S0;
+                // Un générateur par trajectoire, dérivé de la graine : résultat
+                // identique quel que soit le découpage entre threads
+                var random = new Random(unchecked(Seed * 1_000_003 + sim));
+                double S = s0;
                 var path = new double[TimeSteps];
 
                 for (int j = 0; j < TimeSteps; j++)
                 {
-                    double Z = local.Random.NextGaussian();
-                    S *= Math.Exp((R - 0.5 * Sigma * Sigma) * dt + Sigma * Math.Sqrt(dt) * Z);
+                    double Z = random.NextGaussian();
+                    S *= Math.Exp((r - 0.5 * sigma * sigma) * dt + sigma * Math.Sqrt(dt) * Z);
                     path[j] = S;
                 }
 
@@ -91,12 +112,11 @@ public class AsianOpt
                     totalPayoff += local.Payoff;
             });
 
-        return Math.Round(Math.Exp(-R * T) * (totalPayoff / Simulations), 4);
+        return Math.Exp(-r * t) * (totalPayoff / Simulations);
     }
 
     private class LocalState
     {
-        public Random Random { get; set; }
         public double Payoff { get; set; }
     }
 }
