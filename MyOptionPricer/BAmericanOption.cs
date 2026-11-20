@@ -15,11 +15,14 @@ namespace MyOptionPricer
             _q = q;
         }
 
-        public override double CallPrice() => ComputeOption(isCall: true);
-        public override double PutPrice() => ComputeOption(isCall: false);
+        public override double CallPrice() => ComputeOption(isCall: true, out _, out _);
+        public override double PutPrice() => ComputeOption(isCall: false, out _, out _);
 
         /// <summary>
-        /// Grecs par différences finies sur l'arbre binomial (même nombre d'étapes).
+        /// Grecs de l'option américaine. Delta, Gamma et Theta sont lus sur les
+        /// premiers noeuds de l'arbre (Hull) : un choc sur le sous-jacent déplacerait
+        /// la grille de l'arbre et rendrait Gamma très bruité. Vega et Rho sont
+        /// obtenus par chocs centrés, à nombre d'étapes constant.
         /// Theta par année, Vega et Rho pour une variation de 1 (100 %).
         /// </summary>
         public (double Delta, double Gamma, double Theta, double Vega, double Rho) ComputeGreeks(bool isCall)
@@ -30,11 +33,29 @@ namespace MyOptionPricer
                 return isCall ? bumped.CallPrice() : bumped.PutPrice();
             }
 
-            return FiniteDifferenceGreeks.Compute(Price, S, sigma, r, T);
+            var fd = FiniteDifferenceGreeks.Compute(Price, S, sigma, r, T);
+            if (_n < 2)
+                return fd; // arbre trop court pour lire les noeuds
+
+            double price = ComputeOption(isCall, out double[] level1, out double[] level2);
+            double dt = T / _n;
+            double up = ComputeUp();
+            double down = 1.0 / up;
+
+            double delta = (level1[1] - level1[0]) / (S * up - S * down);
+            double gammaUp = (level2[2] - level2[1]) / (S * up * up - S);
+            double gammaDown = (level2[1] - level2[0]) / (S - S * down * down);
+            double gamma = (gammaUp - gammaDown) / (0.5 * (S * up * up - S * down * down));
+            double theta = (level2[1] - price) / (2 * dt);
+
+            return (delta, gamma, theta, fd.Vega, fd.Rho);
         }
 
-        private double ComputeOption(bool isCall)
+        private double ComputeOption(bool isCall, out double[] level1, out double[] level2)
         {
+            level1 = Array.Empty<double>();
+            level2 = Array.Empty<double>();
+
             double deltaT = T / _n;
             double up = ComputeUp();
             double p0 = ComputeRiskNeutralProbability(up, deltaT);
@@ -61,6 +82,10 @@ namespace MyOptionPricer
                     double exercise = isCall ? stockPrice - K : K - stockPrice;
                     prices[i] = Math.Max(prices[i], exercise);
                 }
+
+                // Valeurs aux étapes 1 et 2, utilisées pour les Grecs
+                if (j == 2) level2 = new[] { prices[0], prices[1], prices[2] };
+                if (j == 1) level1 = new[] { prices[0], prices[1] };
             }
 
             return prices[0];

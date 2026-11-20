@@ -45,7 +45,7 @@ public class AmericanGreeksTests
         var tree = new AmericanOption(100, 100, 1, 0.2, 0.05, 1000, 0).ComputeGreeks(true);
 
         Assert.Equal(closed.Delta, tree.Delta, 2);
-        Assert.Equal(closed.Gamma, tree.Gamma, 2);
+        Assert.Equal(closed.Gamma, tree.Gamma, 3);
         Assert.InRange(tree.Vega, closed.Vega - 0.5, closed.Vega + 0.5);
         Assert.InRange(tree.Rho, closed.Rho - 0.5, closed.Rho + 0.5);
         Assert.InRange(tree.Theta, closed.Theta - 0.5, closed.Theta + 0.5);
@@ -60,5 +60,25 @@ public class AmericanGreeksTests
         Assert.True(g.Vega > 0);
         Assert.True(g.Rho < 0);
         Assert.True(g.Theta < 0);
+    }
+}
+
+public class AmericanGammaStabilityTests
+{
+    [Fact]
+    public void GammaIsStableWithFewSteps()
+    {
+        // Avec 200 étapes, un choc de 1 % sur le spot déplace la grille et donne
+        // une Gamma fausse ; la Gamma lue sur l'arbre reste proche de Black-Scholes.
+        var closed = new Greeks(100, 100, 0.05, 0.2, 1).ComputeGreeks(true);
+        var tree = new AmericanOption(100, 100, 1, 0.2, 0.05, 200, 0).ComputeGreeks(true);
+        Assert.Equal(closed.Gamma, tree.Gamma, 3);
+    }
+
+    [Fact]
+    public void SingleStepTreeFallsBackToFiniteDifferences()
+    {
+        var g = new AmericanOption(100, 100, 1, 0.2, 0.05, 1, 0).ComputeGreeks(false);
+        Assert.False(double.IsNaN(g.Delta));
     }
 }

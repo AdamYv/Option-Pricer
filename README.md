@@ -11,7 +11,7 @@ A desktop option pricer (C# / WPF) for European, American and Asian options, wit
 | Option | Pricing method | Greeks |
 |---|---|---|
 | European | Black-Scholes closed form | Closed-form formulas |
-| American | Cox-Ross-Rubinstein binomial tree with continuous dividend yield (number of steps set in the UI) | Central finite differences on the tree |
+| American | Cox-Ross-Rubinstein binomial tree with continuous dividend yield (number of steps set in the UI) | Delta, Gamma and Theta read from the first nodes of the tree (Hull); Vega and Rho by central finite differences |
 | Asian (arithmetic average) | Parallel Monte Carlo simulation of geometric Brownian motion (`Parallel.For`, 252 steps per year), spot and volatility from the Alpha Vantage API | Central finite differences with common random numbers |
 
 Greeks returned: $\Delta$, $\Gamma$, $\Theta$ (per year), $\nu$ (Vega, for a change of 1 = 100 % in volatility) and $\rho$ (for a change of 1 = 100 % in the rate).
