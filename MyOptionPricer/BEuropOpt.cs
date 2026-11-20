@@ -115,12 +115,12 @@ namespace MyOptionPricer
         {
             if (Call)
             {
-                return (ComputeDeltaCall(), ComputeGamma(), ComputeVega(), ComputeThetaCall(), ComputeRhoCall());
+                return (ComputeDeltaCall(), ComputeGamma(), ComputeThetaCall(), ComputeVega(), ComputeRhoCall());
 
             }
             else
             {
-                return (ComputeDeltaPut(), ComputeGamma(), ComputeVega(), ComputeThetaPut(), ComputeRhoPut());
+                return (ComputeDeltaPut(), ComputeGamma(), ComputeThetaPut(), ComputeVega(), ComputeRhoPut());
             }
         }
 

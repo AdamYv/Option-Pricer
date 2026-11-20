@@ -16,6 +16,7 @@
     <Compile Include="..\MyOptionPricer\BAmericanOption.cs" Link="Pricing\BAmericanOption.cs" />
     <Compile Include="..\MyOptionPricer\BAsianOpt.cs" Link="Pricing\BAsianOpt.cs" />
     <Compile Include="..\MyOptionPricer\BAlphaVanAPI.cs" Link="Pricing\BAlphaVanAPI.cs" />
+    <Compile Include="..\MyOptionPricer\BGreeks.cs" Link="Pricing\BGreeks.cs" />
   </ItemGroup>
 
   <ItemGroup>
