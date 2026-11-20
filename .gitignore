@@ -1,1 +1,9 @@
 .vs/
+
+# Artefacts de compilation
+[Bb]in/
+[Oo]bj/
+*.user
+
+# Secrets (clé Alpha Vantage)
+*.env
