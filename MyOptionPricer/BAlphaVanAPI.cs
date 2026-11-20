@@ -23,14 +23,30 @@ public class AlphaVanAPI
         public long Volume { get; set; }
     }
 
+    // La clé n'est plus dans le code : elle est lue dans la variable d'environnement
+    // ALPHAVANTAGE_API_KEY, sinon dans un fichier api_key.env (non versionné)
+    // placé à côté de l'exécutable.
     static AlphaVanAPI()
     {
-        apiKey = "7IZOC5U6JFLWEQET";
+        string? fromEnv = Environment.GetEnvironmentVariable("ALPHAVANTAGE_API_KEY");
+        string file = Path.Combine(AppContext.BaseDirectory, "api_key.env");
+
+        if (!string.IsNullOrWhiteSpace(fromEnv))
+            apiKey = fromEnv.Trim();
+        else if (File.Exists(file))
+            apiKey = File.ReadAllText(file).Trim();
+        else
+            apiKey = "";
     }
 
 
     public static async Task<List<HistoricalData>> GetHistoricalData(string symbol, int days = 100)
     {
+        if (string.IsNullOrEmpty(apiKey))
+            throw new InvalidOperationException(
+                "Clé Alpha Vantage manquante : définissez ALPHAVANTAGE_API_KEY " +
+                "ou créez MyOptionPricer/api_key.env (voir README).");
+
         var url = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={apiKey}&outputsize=compact";
 
         try

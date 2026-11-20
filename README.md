@@ -18,6 +18,10 @@ Greeks returned: $\Delta$, $\Gamma$, $\Theta$ (per year), $\nu$ (Vega, for a cha
 
 For the Asian option, every simulated path has its own random generator derived from a seed, so a price is reproducible and the bumped prices used for the Greeks reuse exactly the same paths. This keeps the finite differences stable.
 
+## Alpha Vantage API key
+
+The Asian option tab downloads prices from [Alpha Vantage](https://www.alphavantage.co/support/#api-key) (free key). The key is not stored in the code: set the `ALPHAVANTAGE_API_KEY` environment variable, or put the key alone in `MyOptionPricer/api_key.env` (ignored by git, copied next to the executable at build time).
+
 ## Tests
 
 The `MyOptionPricer.Tests` project (xUnit) compiles the pricing engines without the WPF UI, so the tests run on any OS:

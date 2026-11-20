@@ -20,6 +20,10 @@
     <Content Include="Content\Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <!-- Clé API locale, non versionnée (voir .gitignore) -->
+    <None Include="api_key.env" Condition="Exists('api_key.env')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
