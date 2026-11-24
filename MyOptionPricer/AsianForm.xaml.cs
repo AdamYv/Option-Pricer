@@ -88,7 +88,8 @@ namespace MyOptionPricer
                 return false;
             }
 
-            if (!double.TryParse(txtRisk.Text, out riskFreeRate) || riskFreeRate <= 0)
+            // Un taux négatif ou nul est valide (ex. taux directeurs européens de 2014 à 2022)
+            if (!double.TryParse(txtRisk.Text, out riskFreeRate) || !double.IsFinite(riskFreeRate))
             {
                 ShowError("Taux sans risque invalide.");
                 return false;

@@ -101,7 +101,15 @@ namespace MyOptionPricer
         {
             double expMinusQDeltaT = Math.Exp(-_q * deltaT);
             double expMinusRDeltaT = Math.Exp(-r * deltaT);
-            return (up * expMinusQDeltaT - expMinusRDeltaT) / (up * up - 1);
+            double p0 = (up * expMinusQDeltaT - expMinusRDeltaT) / (up * up - 1);
+
+            // La probabilité doit rester entre 0 et 1 : avec un écart |r - q| grand devant la
+            // volatilité (taux très négatif, par exemple), l'arbre n'est plus sans arbitrage.
+            if (!(p0 >= 0.0 && p0 <= expMinusRDeltaT))
+                throw new ArgumentException(
+                    "Arbre binomial instable pour ces paramètres : augmentez le nombre d'étapes ou la volatilité.");
+
+            return p0;
         }
     }
 }
