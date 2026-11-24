@@ -18,6 +18,10 @@ Greeks returned: $\Delta$, $\Gamma$, $\Theta$ (per year), $\nu$ (Vega, for a cha
 
 For the Asian option, every simulated path has its own random generator derived from a seed, so a price is reproducible and the bumped prices used for the Greeks reuse exactly the same paths. This keeps the finite differences stable.
 
+## Negative rates
+
+The risk-free rate can be zero or negative in the three engines. With a negative rate, the American call can be worth exercising early even without dividends. The binomial tree rejects parameters that would give a probability outside [0, 1] (increase the number of steps or the volatility).
+
 ## Alpha Vantage API key
 
 The Asian option tab downloads prices from [Alpha Vantage](https://www.alphavantage.co/support/#api-key) (free key). The key is not stored in the code: set the `ALPHAVANTAGE_API_KEY` environment variable, or put the key alone in `MyOptionPricer/api_key.env` (ignored by git, copied next to the executable at build time).
@@ -34,7 +38,8 @@ They check, among other things:
 - Black-Scholes prices against the example from Hull's book (call 4.76, put 0.81) and put-call parity;
 - closed-form European Greeks against finite differences;
 - American call without dividend = European call, and American put = 6.09 for S = K = 100, r = 5 %, σ = 20 %, T = 1;
-- signs and ranges of the American and Asian Greeks, and reproducibility of the Monte Carlo price.
+- signs and ranges of the American and Asian Greeks, and reproducibility of the Monte Carlo price;
+- negative rates: put-call parity (European, Asian), no early exercise of the American put, early exercise of the American call, put-call symmetry.
 
 ## Stack
 
